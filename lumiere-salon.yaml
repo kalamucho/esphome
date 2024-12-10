@@ -1,0 +1,61 @@
+esphome:
+  name: lumiere-salon
+  friendly_name: lumière salon
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "L4ooatzJ6ZatY6Xl7kygTuJJ6Shdyyf4hTGjA13MYk0="
+
+ota:
+  - platform: esphome
+    password: "34993408ecb4e68103ca433a5edd710d"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Lumiere-Salon Fallback Hotspot"
+    password: "vIKuGsKLfzt6"
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Desk light button"
+    on_press:
+      - switch.toggle: relay
+
+switch:
+  - platform: gpio
+    name: "Desk light relay"
+    pin: GPIO12
+    id: relay
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes
+
+sensor:
+  - platform: wifi_signal
+    name: "Desk light WiFi signal"
+    update_interval: 60s
+
+  - platform: uptime
+    name: "Desk light uptime"
+
+text_sensor:
+  - platform: version
+    name: "Desk light ESPHome version"
+    
